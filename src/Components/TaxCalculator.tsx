@@ -1,8 +1,8 @@
-import { TaxValue } from "../Utils/TaxValue";
+import { TaxValue } from "../Utils/TaxValueTypes";
 import Grid from '@mui/material/Grid2';
 import TextInput from "./TextInput";
-import { Button } from "@mui/material";
 import TaxTable from "./TaxTable";
+import ContainedButton from "./ContainedButton";
 
 interface ITaxCalculator{
     hasAnnualIncomeError: boolean;
@@ -38,11 +38,9 @@ export default function TaxCalculator({
             container
             direction="row"
             sx={{
-                justifyContent: "center",
                 marginTop: "10%",
                 marginLeft: "25%",
                 marginRight: "25%"
-
             }}
         >
             <Grid size={16}>
@@ -68,14 +66,21 @@ export default function TaxCalculator({
                     callback={(value) => {setTaxYear(value)}}
                 />
             </Grid>
-            <Grid size={4} data-testid="submit-button">
-                <Button
-                    variant="contained" 
-                    onClick={handleSubmit}
-                    disabled={!submitButtonEnabled}
-                >
-                    Submit
-                </Button>
+            <Grid 
+                size={4} 
+                data-testid="submit-button"
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginBottom: "30px"
+                }}
+            >
+                <ContainedButton 
+                    handleSubmit={handleSubmit}
+                    isButtonEnabled={submitButtonEnabled}
+                    text="Submit"
+                />
             </Grid>
             <Grid size={12}>
                 {

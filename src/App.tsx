@@ -12,7 +12,7 @@ const darkTheme = createTheme({
 })
 
 function App() {  
-  const [error, setError] = useState(ErrorType.NONE);
+  const [error, setError] = useState<ErrorType>(ErrorType.NONE);
   return (
     <>
       <ThemeProvider theme={darkTheme}>

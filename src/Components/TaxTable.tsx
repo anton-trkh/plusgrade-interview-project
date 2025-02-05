@@ -1,5 +1,5 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from "@mui/material";
-import { TaxValue } from "../Utils/TaxValue";
+import { TaxValue } from "../Utils/TaxValueTypes";
 import TaxTableRow from "./TaxTableRow";
 import { useMemo } from "react";
 

@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState } from "react";
 import { getTaxBrackets } from "../Utils/Api";
-import { TaxBracket, TaxValue } from "../Utils/TaxValue";
+import { TaxBracket, TaxValue } from "../Utils/TaxValueTypes";
 import { ErrorContext } from "../Context/ErrorContext";
 import TaxCalculator from "../Components/TaxCalculator";
 
@@ -35,6 +35,9 @@ export default function TaxCalculatorWrapper(): JSX.Element {
     const hasAnnualIncomeError = isNumericInputValid(annualIncome);
     const hasTaxYearError = isNumericInputValid(taxYear);
 
+    const numericAnnualIncome = hasAnnualIncomeError 
+        ? 0
+        : Number(annualIncome);
     const submitButtonEnabled = annualIncome.length > 0 && 
         taxYear.length > 0 && 
         !hasAnnualIncomeError && 
@@ -49,17 +52,21 @@ export default function TaxCalculatorWrapper(): JSX.Element {
         setIsLoading(false);
     }
 
-    const taxDependency = JSON.stringify(taxBrackets);
+    const taxBracketsDependency = JSON.stringify(taxBrackets);
     const taxes = useCallback(() => taxBrackets?.map(
         (taxBracket: TaxBracket): TaxValue => ({
             ...taxBracket, 
-            taxOwed: calculateTaxOwed(Number(annualIncome), taxBracket
+            taxOwed: calculateTaxOwed(numericAnnualIncome, taxBracket
         )}
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    )), [taxDependency])();
+    )), [taxBracketsDependency])();
 
-    const totalTaxOwed = taxes?.reduce((acc: number, { taxOwed }: TaxValue) => (acc + taxOwed), 0);
-    const effectiveTaxRate = totalTaxOwed/ Number(annualIncome) * 100
+    const taxesDependency = JSON.stringify(taxes);
+    const totalTaxOwed = useCallback(() => taxes?.reduce((acc: number, { taxOwed }: TaxValue): number => (acc + taxOwed), 0),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [taxesDependency]
+    )();
+    const effectiveTaxRate = numericAnnualIncome == 0 ? 0 : totalTaxOwed / numericAnnualIncome * 100
 
     return (
         <TaxCalculator

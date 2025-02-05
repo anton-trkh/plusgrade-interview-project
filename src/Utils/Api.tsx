@@ -1,6 +1,6 @@
-import * as Endpoints from "./endpoints";
+import * as Endpoints from "./Endpoints";
 import { ErrorType } from "./ErrorType";
-import { TaxBracketsResponse } from "./TaxValue";
+import { TaxBracketsResponse } from "./TaxValueTypes";
 
 
 export const getTaxBrackets = async (taxYear: string, errorHandler: (errorKind: ErrorType) => void): Promise<TaxBracketsResponse> => {

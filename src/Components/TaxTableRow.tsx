@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from "@mui/material";
-import { TaxValue } from "../Utils/TaxValue";
+import { TaxValue } from "../Utils/TaxValueTypes";
 
 export default function TaxTableRow({min, max, rate, taxOwed}: TaxValue) {
     const taxBracket = max
