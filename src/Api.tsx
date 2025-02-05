@@ -1,4 +1,4 @@
-import { ErrorKind } from "./Enums/ErrorReducer";
+import { ErrorType } from "./Types/ErrorType";
 
 interface TaxBracketsResponse {
     tax_brackets: TaxBracket[]
@@ -12,7 +12,7 @@ export interface TaxBracket {
 
 const BASE_URL = import.meta.env.VITE_API_BASE;
 
-export const getTaxBrackets = async (taxYear: string, errorHandler: (errorKind: ErrorKind) => void): Promise<TaxBracketsResponse> => {
+export const getTaxBrackets = async (taxYear: string, errorHandler: (errorKind: ErrorType) => void): Promise<TaxBracketsResponse> => {
     const url: string = import.meta.env.VITE_DEVELOPMENT_MODE === 'true'
         ? `${BASE_URL}/tax-calculator`
         : `${BASE_URL}/tax-calculator/tax-year/${taxYear}`;
@@ -23,22 +23,23 @@ export const getTaxBrackets = async (taxYear: string, errorHandler: (errorKind: 
     }
 }
 
-const callApi = async <T, >(url: string, errorHandler: (errorKind: ErrorKind) => void): Promise<T> => {
+const callApi = async <T, >(url: string, errorHandler: (errorKind: ErrorType) => void): Promise<T> => {
     try {
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(response.status.toString());
         }
         return await response.json() as T;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
         if (e.message === '404') {
-            errorHandler(ErrorKind.NOT_FOUND);
+            errorHandler(ErrorType.NOT_FOUND);
         }
         else if (e.message === '500') {
-            errorHandler(ErrorKind.INTERNAL_SERVER_ERROR);
+            errorHandler(ErrorType.INTERNAL_SERVER_ERROR);
         }
         else {
-            errorHandler(ErrorKind.UNKNOWN);
+            errorHandler(ErrorType.UNKNOWN);
         }
         throw e;
     }

@@ -2,7 +2,7 @@ import TaxCalculatorWrapper from './Containers/TaxCalculatorWrapper'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useState } from 'react';
 import { ErrorContext } from './Context/ErrorContext';
-import { ErrorKind } from './Enums/ErrorReducer';
+import { ErrorType } from './Types/ErrorType';
 import ErrorDialogue from './Components/ErrorDialogue';
 
 const darkTheme = createTheme({
@@ -12,12 +12,12 @@ const darkTheme = createTheme({
 })
 
 function App() {  
-  const [error, setError] = useState(ErrorKind.NONE);
+  const [error, setError] = useState(ErrorType.NONE);
   return (
     <>
       <ThemeProvider theme={darkTheme}>
         <ErrorContext.Provider value={{
-            dispatch: (error: ErrorKind) => setError(error)
+            dispatch: (error: ErrorType) => setError(error)
         }}>
           <TaxCalculatorWrapper />
           <ErrorDialogue 

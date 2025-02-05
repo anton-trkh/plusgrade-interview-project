@@ -1,4 +1,4 @@
-import { TaxValue } from "../Reducers/TaxReducer";
+import { TaxValue } from "../Types/TaxValue";
 import Grid from '@mui/material/Grid2';
 import TextInput from "./TextInput";
 import { Button } from "@mui/material";

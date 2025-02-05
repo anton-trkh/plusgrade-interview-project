@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { ErrorKind } from "../Enums/ErrorReducer";
+import { ErrorType } from "../Types/ErrorType";
 
 export interface IErrorContext {
-  dispatch: (errorKind: ErrorKind) => void
+  dispatch: (errorKind: ErrorType) => void
 }
 export const ErrorContext = createContext<IErrorContext>({
   dispatch: () => undefined
