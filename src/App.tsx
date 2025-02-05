@@ -2,7 +2,7 @@ import TaxCalculatorWrapper from './Containers/TaxCalculatorWrapper'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useState } from 'react';
 import { ErrorContext } from './Context/ErrorContext';
-import { ErrorType } from './Types/ErrorType';
+import { ErrorType } from './Utils/ErrorType';
 import ErrorDialogue from './Components/ErrorDialogue';
 
 const darkTheme = createTheme({

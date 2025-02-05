@@ -1,4 +1,4 @@
-import { TaxValue } from "../Types/TaxValue";
+import { TaxValue } from "../Utils/TaxValue";
 import Grid from '@mui/material/Grid2';
 import TextInput from "./TextInput";
 import { Button } from "@mui/material";
@@ -13,6 +13,7 @@ interface ITaxCalculator{
     submitButtonEnabled: boolean;
     totalTaxOwed: number;
     effectiveTaxRate: number;
+    isLoading: boolean;
     setAnnualIncome: (value: string) => void;
     setTaxYear: (value: string) => void;
     handleSubmit: () => void
@@ -27,6 +28,7 @@ export default function TaxCalculator({
     submitButtonEnabled,
     totalTaxOwed,
     effectiveTaxRate,
+    isLoading,
     setAnnualIncome,
     setTaxYear,
     handleSubmit
@@ -45,10 +47,10 @@ export default function TaxCalculator({
         >
             <Grid size={16}>
                 <h1>
-                    Welcome to the tax calculator. Please enter your annual income and specify the tax year to submit the request.
+                    Welcome to the tax calculator. Please enter your annual income and specify the tax year to calculate your taxes.
                 </h1>
             </Grid>
-            <Grid size={4}>
+            <Grid size={4} data-testid="annual-income-input">
                 <TextInput
                     helperText="Annual Income"
                     error={hasAnnualIncomeError}
@@ -57,7 +59,7 @@ export default function TaxCalculator({
                     callback={(value) => {setAnnualIncome(value)}}
                 />
             </Grid>
-            <Grid size={4}>
+            <Grid size={4} data-testid="tax-year-input">
                 <TextInput
                     helperText="Tax Year"
                     value={taxYear}
@@ -66,7 +68,7 @@ export default function TaxCalculator({
                     callback={(value) => {setTaxYear(value)}}
                 />
             </Grid>
-            <Grid size={4}>
+            <Grid size={4} data-testid="submit-button">
                 <Button
                     variant="contained" 
                     onClick={handleSubmit}
@@ -76,7 +78,11 @@ export default function TaxCalculator({
                 </Button>
             </Grid>
             <Grid size={12}>
-                <TaxTable taxes={taxes} totalTaxOwed={totalTaxOwed} effectiveTaxRate={effectiveTaxRate}/>
+                {
+                    !isLoading && 
+                    taxes.length > 0 &&
+                    <TaxTable taxes={taxes} totalTaxOwed={totalTaxOwed} effectiveTaxRate={effectiveTaxRate}/>
+                }
             </Grid>
         </Grid>
     );

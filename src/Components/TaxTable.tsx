@@ -1,5 +1,5 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from "@mui/material";
-import { TaxValue } from "../Types/TaxValue";
+import { TaxValue } from "../Utils/TaxValue";
 import TaxTableRow from "./TaxTableRow";
 import { useMemo } from "react";
 
@@ -18,15 +18,17 @@ export default function TaxTable({
         <TableContainer component={Paper}>
             <Table>
                 <TableHead>
-                    <TableCell>
-                        Tax Bracket
-                    </TableCell>
-                    <TableCell>
-                        Tax Rate
-                    </TableCell>
-                    <TableCell>
-                        Tax Owed in Bracket
-                    </TableCell>
+                    <TableRow>
+                        <TableCell>
+                            Tax Bracket
+                        </TableCell>
+                        <TableCell>
+                            Tax Rate
+                        </TableCell>
+                        <TableCell>
+                            Tax Owed in Bracket
+                        </TableCell>
+                    </TableRow>
                 </TableHead>
                 <TableBody>
                     {
@@ -44,5 +46,6 @@ export default function TaxTable({
                 }
             </Table>
         </TableContainer>
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [taxDependency])
 }

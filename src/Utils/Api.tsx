@@ -1,21 +1,12 @@
-import { ErrorType } from "./Types/ErrorType";
+import * as Endpoints from "./endpoints";
+import { ErrorType } from "./ErrorType";
+import { TaxBracketsResponse } from "./TaxValue";
 
-interface TaxBracketsResponse {
-    tax_brackets: TaxBracket[]
-}
-
-export interface TaxBracket {
-    max?: number;
-    min: number;
-    rate: number;
-}
-
-const BASE_URL = import.meta.env.VITE_API_BASE;
 
 export const getTaxBrackets = async (taxYear: string, errorHandler: (errorKind: ErrorType) => void): Promise<TaxBracketsResponse> => {
     const url: string = import.meta.env.VITE_DEVELOPMENT_MODE === 'true'
-        ? `${BASE_URL}/tax-calculator`
-        : `${BASE_URL}/tax-calculator/tax-year/${taxYear}`;
+        ? Endpoints.developmentEndpoint()
+        : Endpoints.testEndpoint(taxYear);
     try {
         return await callApi(url, errorHandler);
     } catch {

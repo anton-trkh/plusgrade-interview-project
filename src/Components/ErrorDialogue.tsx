@@ -1,5 +1,5 @@
 import { Dialog, DialogTitle } from "@mui/material";
-import { ErrorType } from "../Types/ErrorType";
+import { ErrorType } from "../Utils/ErrorType";
 
 interface IErrorDialogue{
     error: ErrorType;
@@ -12,6 +12,7 @@ export default function ErrorDialogue({
 }: IErrorDialogue) {
     return(
         <Dialog
+            data-testid="error-dialogue"
             open={error != ErrorType.NONE}
             onClose={() => setError(ErrorType.NONE)}
         >

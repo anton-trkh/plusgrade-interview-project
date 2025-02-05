@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { ErrorType } from "../Types/ErrorType";
+import { ErrorType } from "../Utils/ErrorType";
 
 export interface IErrorContext {
   dispatch: (errorKind: ErrorType) => void

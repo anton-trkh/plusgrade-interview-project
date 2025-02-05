@@ -1,6 +1,6 @@
-import { useContext, useState } from "react";
-import { getTaxBrackets, TaxBracket } from "../Api";
-import { TaxValue } from "../Types/TaxValue";
+import { useCallback, useContext, useState } from "react";
+import { getTaxBrackets } from "../Utils/Api";
+import { TaxBracket, TaxValue } from "../Utils/TaxValue";
 import { ErrorContext } from "../Context/ErrorContext";
 import TaxCalculator from "../Components/TaxCalculator";
 
@@ -29,32 +29,40 @@ export default function TaxCalculatorWrapper(): JSX.Element {
     const [taxYear, setTaxYear] = useState<string>("");
 
     const [taxBrackets, setTaxBrackets] = useState<TaxBracket[]>([]);
-    
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const errorContext = useContext(ErrorContext);
 
     const hasAnnualIncomeError = isNumericInputValid(annualIncome);
     const hasTaxYearError = isNumericInputValid(taxYear);
 
-    const submitButtonEnabled = annualIncome.length > 0 && taxYear.length > 0 && !hasAnnualIncomeError && !hasTaxYearError;
+    const submitButtonEnabled = annualIncome.length > 0 && 
+        taxYear.length > 0 && 
+        !hasAnnualIncomeError && 
+        !hasTaxYearError && 
+        !isLoading;
 
     const handleSubmit = async (): Promise<void> => {
         setTaxBrackets([]);
+        setIsLoading(true);
         const result = await getTaxBrackets(taxYear, errorContext.dispatch);
         setTaxBrackets(result.tax_brackets);
+        setIsLoading(false);
     }
 
-    const taxes = taxBrackets?.map(
+    const taxDependency = JSON.stringify(taxBrackets);
+    const taxes = useCallback(() => taxBrackets?.map(
         (taxBracket: TaxBracket): TaxValue => ({
             ...taxBracket, 
             taxOwed: calculateTaxOwed(Number(annualIncome), taxBracket
         )}
-    ));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    )), [taxDependency])();
 
     const totalTaxOwed = taxes?.reduce((acc: number, { taxOwed }: TaxValue) => (acc + taxOwed), 0);
     const effectiveTaxRate = totalTaxOwed/ Number(annualIncome) * 100
 
     return (
-        <TaxCalculator 
+        <TaxCalculator
             hasAnnualIncomeError={hasAnnualIncomeError}
             hasTaxYearError={hasTaxYearError}
             annualIncome={annualIncome}
@@ -63,6 +71,7 @@ export default function TaxCalculatorWrapper(): JSX.Element {
             submitButtonEnabled={submitButtonEnabled}
             totalTaxOwed={totalTaxOwed}
             effectiveTaxRate={effectiveTaxRate}
+            isLoading={isLoading}
             setAnnualIncome={setAnnualIncome}
             setTaxYear={setTaxYear}
             handleSubmit={handleSubmit}
