@@ -35,9 +35,7 @@ export default function TaxCalculatorWrapper(): JSX.Element {
     const hasAnnualIncomeError = isNumericInputValid(annualIncome);
     const hasTaxYearError = isNumericInputValid(taxYear);
 
-    const numericAnnualIncome = hasAnnualIncomeError 
-        ? 0
-        : Number(annualIncome);
+    const numericAnnualIncome = hasAnnualIncomeError ? 0 : Number(annualIncome);
     const submitButtonEnabled = annualIncome.length > 0 && 
         taxYear.length > 0 && 
         !hasAnnualIncomeError && 
